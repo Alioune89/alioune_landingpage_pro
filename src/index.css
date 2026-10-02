@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-ivory font-sans text-ardoise;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: #c9a84c;
+    color: #0d0d12;
+  }
+
+  section[id],
+  [data-anchor] {
+    scroll-margin-top: 6rem;
+  }
+}
+
+/* Overlay de bruit global — casse les aplats numériques */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@layer components {
+  /* Bouton magnétique : scale subtil + fond glissant */
+  .btn-magnetic {
+    @apply relative inline-flex select-none items-center justify-center overflow-hidden rounded-full font-medium;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .btn-magnetic:hover {
+    transform: scale(1.03);
+  }
+
+  .btn-magnetic:active {
+    transform: scale(0.98);
+  }
+
+  .btn-magnetic .btn-slide {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    transform: translateY(101%);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .btn-magnetic:hover .btn-slide {
+    transform: translateY(0);
+  }
+
+  .btn-magnetic .btn-label {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .link-lift {
+    display: inline-block;
+    transition:
+      transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      color 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .link-lift:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.caret-blink {
+  animation: caret-blink 1s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
